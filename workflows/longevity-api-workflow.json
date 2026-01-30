@@ -1,0 +1,1013 @@
+{
+  "name": "Longevity App - API Backend",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "api/health/metrics",
+        "responseMode": "lastNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-metrics",
+      "name": "POST /api/health/metrics",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ],
+      "webhookId": "health-metrics-post"
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "api/health/metrics",
+        "responseMode": "lastNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-metrics-get",
+      "name": "GET /api/health/metrics",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        500
+      ],
+      "webhookId": "health-metrics-get"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "api/protocol/log",
+        "responseMode": "lastNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-protocol-log",
+      "name": "POST /api/protocol/log",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        700
+      ],
+      "webhookId": "protocol-log-post"
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "api/scores/current",
+        "responseMode": "lastNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-scores",
+      "name": "GET /api/scores/current",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        900
+      ],
+      "webhookId": "scores-current-get"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "api/fasting/start",
+        "responseMode": "lastNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-fasting-start",
+      "name": "POST /api/fasting/start",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        1100
+      ],
+      "webhookId": "fasting-start-post"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "api/ai/recommendations",
+        "responseMode": "lastNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-ai-recommendations",
+      "name": "POST /api/ai/recommendations",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        1300
+      ],
+      "webhookId": "ai-recommendations-post"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "validate-auth",
+              "leftValue": "={{ $json.headers['authorization'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "validate-auth-metrics",
+      "name": "Validate Auth",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "validate-body",
+              "leftValue": "={{ $json.body.user_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "validate-date",
+              "leftValue": "={{ $json.body.date }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "validate-metrics-data",
+      "name": "Validate Metrics Data",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        700,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"user_id\": \"{{ $json.body.user_id }}\",\n  \"date\": \"{{ $json.body.date }}\",\n  \"source\": \"{{ $json.body.source || 'manual' }}\",\n  \"sleep_score\": {{ $json.body.sleep_score || 'null' }},\n  \"sleep_duration_minutes\": {{ $json.body.sleep_duration_minutes || 'null' }},\n  \"deep_sleep_minutes\": {{ $json.body.deep_sleep_minutes || 'null' }},\n  \"rem_sleep_minutes\": {{ $json.body.rem_sleep_minutes || 'null' }},\n  \"hrv_avg\": {{ $json.body.hrv_avg || 'null' }},\n  \"resting_hr\": {{ $json.body.resting_hr || 'null' }},\n  \"recovery_score\": {{ $json.body.recovery_score || 'null' }},\n  \"steps\": {{ $json.body.steps || 'null' }},\n  \"active_calories\": {{ $json.body.active_calories || 'null' }},\n  \"activity_score\": {{ $json.body.activity_score || 'null' }}\n}",
+        "options": {}
+      },
+      "id": "transform-metrics",
+      "name": "Transform Metrics",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        920,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "public",
+        "table": "health_metrics",
+        "columns": "user_id, date, source, sleep_score, sleep_duration_minutes, deep_sleep_minutes, rem_sleep_minutes, hrv_avg, resting_hr, recovery_score, steps, active_calories, activity_score",
+        "options": {
+          "onConflict": "update"
+        }
+      },
+      "id": "insert-metrics",
+      "name": "Insert Health Metrics",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1140,
+        260
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "supabase-postgres",
+          "name": "Supabase PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calculate health scores based on metrics\nconst metrics = $input.first().json;\n\n// Sleep Score (0-100)\nfunction calcSleepScore(data) {\n  if (!data.sleep_duration_minutes) return null;\n  \n  let score = 0;\n  const duration = data.sleep_duration_minutes;\n  const deepSleep = data.deep_sleep_minutes || 0;\n  const remSleep = data.rem_sleep_minutes || 0;\n  \n  // Duration score (7-9 hours optimal)\n  if (duration >= 420 && duration <= 540) {\n    score += 40; // 7-9 hours is optimal\n  } else if (duration >= 360 && duration < 420) {\n    score += 30; // 6-7 hours\n  } else if (duration > 540 && duration <= 600) {\n    score += 30; // 9-10 hours\n  } else {\n    score += Math.max(0, 20 - Math.abs(duration - 480) / 30);\n  }\n  \n  // Deep sleep score (20-25% optimal)\n  const deepPercent = (deepSleep / duration) * 100;\n  if (deepPercent >= 20 && deepPercent <= 25) {\n    score += 30;\n  } else if (deepPercent >= 15 && deepPercent < 20) {\n    score += 20;\n  } else {\n    score += Math.max(0, 15 - Math.abs(deepPercent - 22.5));\n  }\n  \n  // REM score (20-25% optimal)\n  const remPercent = (remSleep / duration) * 100;\n  if (remPercent >= 20 && remPercent <= 25) {\n    score += 30;\n  } else if (remPercent >= 15 && remPercent < 20) {\n    score += 20;\n  } else {\n    score += Math.max(0, 15 - Math.abs(remPercent - 22.5));\n  }\n  \n  return Math.round(Math.min(100, score));\n}\n\n// Activity Score (0-100)\nfunction calcActivityScore(data) {\n  if (!data.steps) return null;\n  \n  let score = 0;\n  \n  // Steps score (10,000 target)\n  if (data.steps >= 10000) {\n    score += 50;\n  } else {\n    score += (data.steps / 10000) * 50;\n  }\n  \n  // Active calories (500 target)\n  if (data.active_calories) {\n    if (data.active_calories >= 500) {\n      score += 50;\n    } else {\n      score += (data.active_calories / 500) * 50;\n    }\n  } else {\n    score += 25; // Partial if no calorie data\n  }\n  \n  return Math.round(Math.min(100, score));\n}\n\n// Recovery Score (0-100) based on HRV\nfunction calcRecoveryScore(data) {\n  if (!data.hrv_avg) return null;\n  \n  const hrv = data.hrv_avg;\n  const rhr = data.resting_hr || 60;\n  \n  let score = 0;\n  \n  // HRV score (higher is generally better)\n  // 60-100ms is typical good range for most adults\n  if (hrv >= 60) {\n    score += 50 + Math.min(30, (hrv - 60) / 2);\n  } else if (hrv >= 40) {\n    score += 30 + ((hrv - 40) / 20) * 20;\n  } else {\n    score += (hrv / 40) * 30;\n  }\n  \n  // Resting HR score (lower is better, 50-60 optimal)\n  if (rhr <= 60) {\n    score += 20;\n  } else if (rhr <= 70) {\n    score += 15;\n  } else if (rhr <= 80) {\n    score += 10;\n  } else {\n    score += 5;\n  }\n  \n  return Math.round(Math.min(100, score));\n}\n\nconst sleepScore = calcSleepScore(metrics);\nconst activityScore = calcActivityScore(metrics);\nconst recoveryScore = calcRecoveryScore(metrics);\n\n// Calculate overall score (weighted average)\nlet components = [];\nlet weights = [];\n\nif (sleepScore !== null) {\n  components.push(sleepScore * 0.35);\n  weights.push(0.35);\n}\nif (activityScore !== null) {\n  components.push(activityScore * 0.35);\n  weights.push(0.35);\n}\nif (recoveryScore !== null) {\n  components.push(recoveryScore * 0.30);\n  weights.push(0.30);\n}\n\nconst totalWeight = weights.reduce((a, b) => a + b, 0);\nconst overallScore = totalWeight > 0 \n  ? Math.round(components.reduce((a, b) => a + b, 0) / totalWeight)\n  : null;\n\nreturn {\n  user_id: metrics.user_id,\n  date: metrics.date,\n  sleep_score: sleepScore,\n  activity_score: activityScore,\n  recovery_score: recoveryScore,\n  overall_score: overallScore,\n  calculated_at: new Date().toISOString()\n};"
+      },
+      "id": "calculate-scores",
+      "name": "Calculate Health Scores",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "public",
+        "table": "health_scores",
+        "columns": "user_id, date, sleep_score, activity_score, recovery_score, overall_score",
+        "conflictColumns": "user_id, date",
+        "options": {}
+      },
+      "id": "upsert-scores",
+      "name": "Upsert Health Scores",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1580,
+        260
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "supabase-postgres",
+          "name": "Supabase PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"Health metrics recorded successfully\",\n  \"data\": {\n    \"user_id\": \"{{ $json.user_id }}\",\n    \"date\": \"{{ $json.date }}\",\n    \"scores\": {\n      \"sleep\": {{ $json.sleep_score || 'null' }},\n      \"activity\": {{ $json.activity_score || 'null' }},\n      \"recovery\": {{ $json.recovery_score || 'null' }},\n      \"overall\": {{ $json.overall_score || 'null' }}\n    }\n  }\n}",
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "id": "response-metrics-success",
+      "name": "Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1800,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"error\": \"Unauthorized\",\n  \"message\": \"Authorization header is required\"\n}",
+        "options": {
+          "responseCode": 401
+        }
+      },
+      "id": "response-unauthorized",
+      "name": "401 Unauthorized",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        700,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"error\": \"Bad Request\",\n  \"message\": \"user_id and date are required fields\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "response-bad-request",
+      "name": "400 Bad Request",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        920,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  hm.*,\n  hs.overall_score,\n  hs.sleep_score as calculated_sleep_score,\n  hs.activity_score as calculated_activity_score\nFROM health_metrics hm\nLEFT JOIN health_scores hs ON hm.user_id = hs.user_id AND hm.date = hs.date\nWHERE hm.user_id = '{{ $json.query.user_id }}'\nORDER BY hm.date DESC\nLIMIT {{ $json.query.limit || 30 }}",
+        "options": {}
+      },
+      "id": "query-metrics",
+      "name": "Query Health Metrics",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        480,
+        500
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "supabase-postgres",
+          "name": "Supabase PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"data\": {{ JSON.stringify($json) }},\n  \"count\": {{ $input.all().length }}\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "response-metrics-list",
+      "name": "Return Metrics List",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        700,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "validate-protocol-user",
+              "leftValue": "={{ $json.body.user_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "validate-protocol-item",
+              "leftValue": "={{ $json.body.protocol_item_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "validate-protocol-log",
+      "name": "Validate Protocol Log",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        480,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "public",
+        "table": "protocol_logs",
+        "columns": "user_id, protocol_item_id, notes",
+        "options": {}
+      },
+      "id": "insert-protocol-log",
+      "name": "Insert Protocol Log",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        700,
+        680
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "supabase-postgres",
+          "name": "Supabase PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Update streak for the user\nconst input = $input.first().json;\nconst userId = input.user_id;\nconst streakType = input.streak_type || 'protocol';\nconst today = new Date().toISOString().split('T')[0];\n\n// This would typically query the database to get current streak\n// For now, we'll return the update operation\nreturn {\n  user_id: userId,\n  streak_type: streakType,\n  date_logged: today,\n  action: 'increment_streak'\n};"
+      },
+      "id": "update-streak",
+      "name": "Update Streak",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"Protocol item logged successfully\",\n  \"data\": {\n    \"user_id\": \"{{ $json.user_id }}\",\n    \"logged_at\": \"{{ $now }}\"\n  }\n}",
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "id": "response-protocol-success",
+      "name": "Protocol Log Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1140,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  hs.*,\n  p.date_of_birth,\n  EXTRACT(YEAR FROM AGE(CURRENT_DATE, p.date_of_birth)) as chronological_age\nFROM health_scores hs\nJOIN profiles p ON hs.user_id = p.id\nWHERE hs.user_id = '{{ $json.query.user_id }}'\nORDER BY hs.date DESC\nLIMIT 1",
+        "options": {}
+      },
+      "id": "query-current-scores",
+      "name": "Query Current Scores",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        480,
+        900
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "supabase-postgres",
+          "name": "Supabase PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calculate biological age estimate\nconst data = $input.first().json;\n\nif (!data || !data.chronological_age) {\n  return {\n    error: 'No data available',\n    biological_age: null,\n    chronological_age: null\n  };\n}\n\nconst chronoAge = parseFloat(data.chronological_age);\nconst overallScore = data.overall_score || 70;\nconst sleepScore = data.sleep_score || 70;\nconst activityScore = data.activity_score || 70;\nconst recoveryScore = data.recovery_score || 70;\n\n// Biological age estimation algorithm\n// Based on score deviation from optimal (80 = no modification)\nconst scoreBaseline = 80;\n\n// Sleep impact: Poor sleep ages you faster\nconst sleepImpact = (scoreBaseline - sleepScore) * 0.08;\n\n// Activity impact: Sedentary lifestyle ages you\nconst activityImpact = (scoreBaseline - activityScore) * 0.10;\n\n// Recovery impact: Poor recovery indicates stress/inflammation\nconst recoveryImpact = (scoreBaseline - recoveryScore) * 0.06;\n\n// Calculate biological age\nlet biologicalAge = chronoAge + sleepImpact + activityImpact + recoveryImpact;\nbiologicalAge = Math.round(biologicalAge * 10) / 10;\n\nconst ageDifference = Math.round((biologicalAge - chronoAge) * 10) / 10;\n\nreturn {\n  user_id: data.user_id,\n  date: data.date,\n  chronological_age: chronoAge,\n  biological_age: biologicalAge,\n  age_difference: ageDifference,\n  status: ageDifference < 0 ? 'younger' : ageDifference > 0 ? 'older' : 'same',\n  scores: {\n    overall: overallScore,\n    sleep: sleepScore,\n    activity: activityScore,\n    recovery: recoveryScore\n  },\n  insights: {\n    sleep_impact: Math.round(sleepImpact * 10) / 10,\n    activity_impact: Math.round(activityImpact * 10) / 10,\n    recovery_impact: Math.round(recoveryImpact * 10) / 10\n  }\n};"
+      },
+      "id": "calculate-bio-age",
+      "name": "Calculate Biological Age",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, data: $json }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "response-scores",
+      "name": "Return Scores",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        920,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"user_id\": \"{{ $json.body.user_id }}\",\n  \"target_hours\": {{ $json.body.target_hours || 16 }},\n  \"started_at\": \"{{ $now }}\"\n}",
+        "options": {}
+      },
+      "id": "prepare-fasting",
+      "name": "Prepare Fasting Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "public",
+        "table": "fasting_logs",
+        "columns": "user_id, started_at, target_hours",
+        "options": {
+          "returnData": true
+        }
+      },
+      "id": "insert-fasting",
+      "name": "Start Fasting Log",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        700,
+        1100
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "supabase-postgres",
+          "name": "Supabase PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"Fasting started\",\n  \"data\": {\n    \"id\": \"{{ $json.id }}\",\n    \"user_id\": \"{{ $json.user_id }}\",\n    \"started_at\": \"{{ $json.started_at }}\",\n    \"target_hours\": {{ $json.target_hours }},\n    \"target_end\": \"{{ new Date(new Date($json.started_at).getTime() + $json.target_hours * 60 * 60 * 1000).toISOString() }}\"\n  }\n}",
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "id": "response-fasting-started",
+      "name": "Fasting Started Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        920,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  hs.*, \n  hm.hrv_avg, \n  hm.sleep_duration_minutes,\n  hm.steps,\n  p.date_of_birth,\n  p.primary_goal,\n  EXTRACT(YEAR FROM AGE(CURRENT_DATE, p.date_of_birth)) as age\nFROM health_scores hs\nJOIN health_metrics hm ON hs.user_id = hm.user_id AND hs.date = hm.date\nJOIN profiles p ON hs.user_id = p.id\nWHERE hs.user_id = '{{ $json.body.user_id }}'\nORDER BY hs.date DESC\nLIMIT 30",
+        "options": {}
+      },
+      "id": "query-ai-context",
+      "name": "Query User Context",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        480,
+        1300
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "supabase-postgres",
+          "name": "Supabase PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare context for AI recommendations\nconst data = $input.all().map(item => item.json);\n\nif (!data || data.length === 0) {\n  return { error: 'No user data available' };\n}\n\nconst latest = data[0];\nconst history = data;\n\n// Calculate averages\nconst avgSleep = Math.round(history.reduce((sum, d) => sum + (d.sleep_score || 0), 0) / history.length);\nconst avgActivity = Math.round(history.reduce((sum, d) => sum + (d.activity_score || 0), 0) / history.length);\nconst avgRecovery = Math.round(history.reduce((sum, d) => sum + (d.recovery_score || 0), 0) / history.length);\nconst avgHRV = Math.round(history.reduce((sum, d) => sum + (d.hrv_avg || 0), 0) / history.filter(d => d.hrv_avg).length) || 'N/A';\nconst avgSteps = Math.round(history.reduce((sum, d) => sum + (d.steps || 0), 0) / history.filter(d => d.steps).length) || 'N/A';\n\n// Identify low-scoring areas\nconst lowAreas = [];\nif (avgSleep < 70) lowAreas.push('Sleep quality');\nif (avgActivity < 70) lowAreas.push('Physical activity');\nif (avgRecovery < 70) lowAreas.push('Recovery/HRV');\n\n// Build prompt context\nconst prompt = `You are a longevity and health optimization expert. Based on the following user data, provide 3-5 specific, actionable recommendations to improve their healthspan.\n\nUser Profile:\n- Age: ${latest.age} years\n- Primary Goal: ${latest.primary_goal || 'General health optimization'}\n\n30-Day Averages:\n- Sleep Score: ${avgSleep}/100\n- Activity Score: ${avgActivity}/100  \n- Recovery Score: ${avgRecovery}/100\n- Average HRV: ${avgHRV} ms\n- Average Daily Steps: ${avgSteps}\n\nAreas Needing Attention: ${lowAreas.length > 0 ? lowAreas.join(', ') : 'None identified'}\n\nPlease provide recommendations that are:\n1. Specific and actionable (exact protocols, timing, dosages where appropriate)\n2. Based on current scientific evidence\n3. Prioritized by potential impact\n4. Safe and evidence-based\n\nFormat your response as a JSON array with objects containing: title, description, priority (high/medium/low), category (sleep/exercise/nutrition/supplements/stress), and evidence_level (strong/moderate/emerging).`;\n\nreturn {\n  user_id: latest.user_id,\n  context: {\n    age: latest.age,\n    goal: latest.primary_goal,\n    avgScores: { sleep: avgSleep, activity: avgActivity, recovery: avgRecovery },\n    avgHRV,\n    avgSteps,\n    lowAreas\n  },\n  prompt\n};"
+      },
+      "id": "prepare-ai-context",
+      "name": "Prepare AI Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        1300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "claude-3-5-sonnet-20241022",
+        "messages": {
+          "values": [
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokensToSample": 2000,
+          "temperature": 0.7
+        }
+      },
+      "id": "ai-claude",
+      "name": "Claude AI Recommendations",
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        920,
+        1300
+      ],
+      "credentials": {
+        "anthropicApi": {
+          "id": "anthropic-api",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse and format AI recommendations\nconst input = $input.first().json;\nconst aiResponse = input.response || input.message?.content || input.content || '';\n\ntry {\n  // Try to extract JSON from the response\n  let recommendations;\n  const jsonMatch = aiResponse.match(/\\[\\s*\\{[\\s\\S]*\\}\\s*\\]/);\n  \n  if (jsonMatch) {\n    recommendations = JSON.parse(jsonMatch[0]);\n  } else {\n    // If no JSON found, create a structured response from text\n    recommendations = [{\n      title: 'AI Recommendations',\n      description: aiResponse,\n      priority: 'medium',\n      category: 'general',\n      evidence_level: 'moderate'\n    }];\n  }\n  \n  return {\n    success: true,\n    recommendations,\n    generated_at: new Date().toISOString()\n  };\n} catch (error) {\n  return {\n    success: true,\n    recommendations: [{\n      title: 'Health Recommendations',\n      description: aiResponse,\n      priority: 'medium',\n      category: 'general',\n      evidence_level: 'moderate'\n    }],\n    generated_at: new Date().toISOString(),\n    parse_note: 'Response formatted as single recommendation'\n  };\n}"
+      },
+      "id": "parse-ai-response",
+      "name": "Parse AI Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1140,
+        1300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "response-ai-recommendations",
+      "name": "Return AI Recommendations",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1360,
+        1300
+      ]
+    }
+  ],
+  "connections": {
+    "POST /api/health/metrics": {
+      "main": [
+        [
+          {
+            "node": "Validate Auth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Auth": {
+      "main": [
+        [
+          {
+            "node": "Validate Metrics Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "401 Unauthorized",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Metrics Data": {
+      "main": [
+        [
+          {
+            "node": "Transform Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "400 Bad Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Metrics": {
+      "main": [
+        [
+          {
+            "node": "Insert Health Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Health Metrics": {
+      "main": [
+        [
+          {
+            "node": "Calculate Health Scores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Health Scores": {
+      "main": [
+        [
+          {
+            "node": "Upsert Health Scores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Health Scores": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET /api/health/metrics": {
+      "main": [
+        [
+          {
+            "node": "Query Health Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Health Metrics": {
+      "main": [
+        [
+          {
+            "node": "Return Metrics List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST /api/protocol/log": {
+      "main": [
+        [
+          {
+            "node": "Validate Protocol Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Protocol Log": {
+      "main": [
+        [
+          {
+            "node": "Insert Protocol Log",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "400 Bad Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Protocol Log": {
+      "main": [
+        [
+          {
+            "node": "Update Streak",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Streak": {
+      "main": [
+        [
+          {
+            "node": "Protocol Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET /api/scores/current": {
+      "main": [
+        [
+          {
+            "node": "Query Current Scores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Current Scores": {
+      "main": [
+        [
+          {
+            "node": "Calculate Biological Age",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Biological Age": {
+      "main": [
+        [
+          {
+            "node": "Return Scores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST /api/fasting/start": {
+      "main": [
+        [
+          {
+            "node": "Prepare Fasting Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Fasting Data": {
+      "main": [
+        [
+          {
+            "node": "Start Fasting Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Fasting Log": {
+      "main": [
+        [
+          {
+            "node": "Fasting Started Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST /api/ai/recommendations": {
+      "main": [
+        [
+          {
+            "node": "Query User Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query User Context": {
+      "main": [
+        [
+          {
+            "node": "Prepare AI Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare AI Context": {
+      "main": [
+        [
+          {
+            "node": "Claude AI Recommendations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude AI Recommendations": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Response": {
+      "main": [
+        [
+          {
+            "node": "Return AI Recommendations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null
+}
