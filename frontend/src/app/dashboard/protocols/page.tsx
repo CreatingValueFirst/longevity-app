@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   ClipboardList,
   Plus,
@@ -22,28 +22,7 @@ import { Progress } from '@/components/ui/progress';
 import { ProtocolChecklist, StreakCounter } from '@/components/tracking/ProtocolChecklist';
 import { DEFAULT_PROTOCOL_TEMPLATES, PROTOCOL_CATEGORIES, type ProtocolItem } from '@/types/protocols';
 import { cn } from '@/lib/utils';
-
-// Demo data
-const userProtocol: ProtocolItem[] = [
-  { id: '1', name: 'Morning light exposure (10-30 min)', category: 'sleep', frequency: 'daily', timeOfDay: 'morning', isActive: true },
-  { id: '2', name: 'Vitamin D3', category: 'supplement', frequency: 'daily', timeOfDay: 'morning', dosage: '4000 IU', isActive: true },
-  { id: '3', name: 'Omega-3 (EPA+DHA)', category: 'supplement', frequency: 'daily', timeOfDay: 'morning', dosage: '2g', isActive: true },
-  { id: '4', name: 'Creatine monohydrate', category: 'supplement', frequency: 'daily', timeOfDay: 'morning', dosage: '5g', isActive: true },
-  { id: '5', name: 'Zone 2 cardio (45-60 min)', category: 'exercise', frequency: 'daily', timeOfDay: 'morning', notes: 'MWF', isActive: true },
-  { id: '6', name: 'Strength training', category: 'exercise', frequency: 'daily', timeOfDay: 'afternoon', notes: 'TTh', isActive: true },
-  { id: '7', name: 'Protein target (160g)', category: 'nutrition', frequency: 'daily', timeOfDay: 'anytime', isActive: true },
-  { id: '8', name: 'Time-restricted eating (16:8)', category: 'nutrition', frequency: 'daily', timeOfDay: 'anytime', isActive: true },
-  { id: '9', name: 'Magnesium glycinate', category: 'supplement', frequency: 'daily', timeOfDay: 'evening', dosage: '400mg', isActive: true },
-  { id: '10', name: 'Wind down routine', category: 'sleep', frequency: 'daily', timeOfDay: 'evening', isActive: true },
-  { id: '11', name: 'Cold exposure (3 min)', category: 'therapy', frequency: 'daily', timeOfDay: 'morning', isActive: true },
-  { id: '12', name: '10 min meditation', category: 'mindfulness', frequency: 'daily', timeOfDay: 'morning', isActive: true },
-];
-
-const streaks = {
-  protocol: { current: 12, longest: 28 },
-  fasting: { current: 5, longest: 14 },
-  exercise: { current: 8, longest: 21 },
-};
+import { useProtocol, useProtocolHistory } from '@/hooks/useProtocol';
 
 const categoryIcons = {
   supplement: Pill,
@@ -55,28 +34,55 @@ const categoryIcons = {
 };
 
 export default function ProtocolsPage() {
-  const [completedIds, setCompletedIds] = useState<Set<string>>(new Set(['1', '2', '3', '4', '11', '12']));
   const [activeTab, setActiveTab] = useState('today');
 
-  const groupedItems = {
-    morning: userProtocol.filter((i) => i.timeOfDay === 'morning'),
-    afternoon: userProtocol.filter((i) => i.timeOfDay === 'afternoon'),
-    evening: userProtocol.filter((i) => i.timeOfDay === 'evening'),
-    anytime: userProtocol.filter((i) => i.timeOfDay === 'anytime'),
-  };
+  // Use the protocol hook for state management
+  const {
+    items,
+    groupedItems,
+    completedIds,
+    streaks,
+    totalItems,
+    completedCount,
+    completionPercent,
+    isLoading,
+    isLogging,
+    logItem,
+  } = useProtocol();
 
-  const completionPercent = Math.round((completedIds.size / userProtocol.length) * 100);
+  // Use history hook for adherence calculation
+  const { thirtyDayAdherence } = useProtocolHistory();
 
-  const handleLogItem = (itemId: string) => {
-    setCompletedIds((prev) => new Set([...prev, itemId]));
-  };
+  // Format streaks for the StreakCounter component
+  const formattedStreaks = useMemo(() => ({
+    protocol: { current: streaks.protocol?.current || 0, longest: streaks.protocol?.longest || 0 },
+    fasting: { current: streaks.fasting?.current || 0, longest: streaks.fasting?.longest || 0 },
+    exercise: { current: streaks.exercise?.current || 0, longest: streaks.exercise?.longest || 0 },
+  }), [streaks]);
 
   // Group items by category for the "All Items" view
-  const itemsByCategory = userProtocol.reduce((acc, item) => {
-    if (!acc[item.category]) acc[item.category] = [];
-    acc[item.category].push(item);
-    return acc;
-  }, {} as Record<string, ProtocolItem[]>);
+  const itemsByCategory = useMemo(() => {
+    return items.reduce((acc, item) => {
+      if (!acc[item.category]) acc[item.category] = [];
+      acc[item.category].push(item);
+      return acc;
+    }, {} as Record<string, ProtocolItem[]>);
+  }, [items]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+            <ClipboardList className="h-8 w-8 text-primary" />
+            Protocols
+          </h1>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -113,7 +119,7 @@ export default function ProtocolsPage() {
             </div>
             <Progress value={completionPercent} className="h-3" />
             <p className="text-sm text-muted-foreground mt-2">
-              {completedIds.size} of {userProtocol.length} items completed
+              {completedCount} of {totalItems} items completed
             </p>
           </CardContent>
         </Card>
@@ -125,12 +131,12 @@ export default function ProtocolsPage() {
                 <Flame className="h-6 w-6 text-orange-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{streaks.protocol.current} days</p>
+                <p className="text-2xl font-bold">{formattedStreaks.protocol.current} days</p>
                 <p className="text-sm text-muted-foreground">Current Streak</p>
               </div>
             </div>
             <p className="text-xs text-muted-foreground mt-3">
-              Personal best: {streaks.protocol.longest} days
+              Personal best: {formattedStreaks.protocol.longest} days
             </p>
           </CardContent>
         </Card>
@@ -142,12 +148,12 @@ export default function ProtocolsPage() {
                 <Check className="h-6 w-6 text-green-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">87%</p>
+                <p className="text-2xl font-bold">{thirtyDayAdherence}%</p>
                 <p className="text-sm text-muted-foreground">30-Day Adherence</p>
               </div>
             </div>
             <p className="text-xs text-muted-foreground mt-3">
-              +5% from last month
+              Based on completed items
             </p>
           </CardContent>
         </Card>
@@ -165,23 +171,24 @@ export default function ProtocolsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <ProtocolChecklist
-                items={userProtocol}
+                items={items}
                 completedIds={completedIds}
                 groupedItems={groupedItems}
                 completionPercent={completionPercent}
-                streak={streaks.protocol.current}
-                onLogItem={handleLogItem}
+                streak={formattedStreaks.protocol.current}
+                onLogItem={logItem}
+                isLogging={isLogging}
               />
             </div>
             <div>
-              <StreakCounter streaks={streaks} />
+              <StreakCounter streaks={formattedStreaks} />
             </div>
           </div>
         </TabsContent>
 
         <TabsContent value="all" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Object.entries(itemsByCategory).map(([category, items]) => {
+            {Object.entries(itemsByCategory).map(([category, categoryItems]) => {
               const categoryInfo = PROTOCOL_CATEGORIES[category as keyof typeof PROTOCOL_CATEGORIES];
               const Icon = categoryIcons[category as keyof typeof categoryIcons];
 
@@ -194,17 +201,23 @@ export default function ProtocolsPage() {
                       </div>
                       {category}
                     </CardTitle>
-                    <CardDescription>{items.length} items</CardDescription>
+                    <CardDescription>{categoryItems.length} items</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
-                      {items.map((item) => (
+                      {categoryItems.map((item) => (
                         <div
                           key={item.id}
-                          className="flex items-center justify-between p-2 rounded-lg bg-muted/50"
+                          className={cn(
+                            "flex items-center justify-between p-2 rounded-lg bg-muted/50",
+                            completedIds.has(item.id) && "bg-green-500/10"
+                          )}
                         >
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium truncate text-sm">{item.name}</p>
+                            <p className={cn(
+                              "font-medium truncate text-sm",
+                              completedIds.has(item.id) && "line-through text-muted-foreground"
+                            )}>{item.name}</p>
                             {item.dosage && (
                               <p className="text-xs text-muted-foreground">{item.dosage}</p>
                             )}

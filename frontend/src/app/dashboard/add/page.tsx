@@ -71,7 +71,7 @@ export default function AddEntryPage() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
     toast.success('Entry added successfully!');
-    router.push('/');
+    router.push('/dashboard');
   };
 
   if (!selectedType) {
@@ -390,7 +390,7 @@ export default function AddEntryPage() {
               <p className="text-muted-foreground mb-4">
                 Go to the Fasting page to start and track your intermittent fasting.
               </p>
-              <Button onClick={() => router.push('/fasting')}>
+              <Button onClick={() => router.push('/dashboard/fasting')}>
                 Go to Fasting Timer
               </Button>
             </div>

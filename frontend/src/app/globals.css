@@ -499,7 +499,59 @@
 
   /* Ensure proper spacing for bottom navigation */
   .has-mobile-nav {
-    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Improve input fields on mobile */
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  input[type="password"],
+  input[type="date"],
+  input[type="time"],
+  textarea,
+  select {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    min-height: 48px;
+  }
+
+  /* Larger touch targets for checkboxes and switches */
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-width: 24px;
+    min-height: 24px;
+  }
+
+  /* Better card padding on mobile */
+  .card {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Improve table scrolling on mobile */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Tablet-specific adjustments */
+@media (min-width: 640px) and (max-width: 1023px) {
+  /* Tablet optimizations */
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Large touch devices (tablets in portrait) */
+@media (pointer: coarse) and (min-width: 640px) {
+  /* Increase touch targets on touch devices */
+  button,
+  a,
+  [role="button"] {
+    min-height: 48px;
   }
 }
 

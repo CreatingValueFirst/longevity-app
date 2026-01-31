@@ -74,7 +74,7 @@ export function Sidebar({ className }: SidebarProps) {
       <Separator />
 
       {/* Main Navigation */}
-      <nav className="flex-1 p-3 space-y-1">
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto scroll-momentum">
         {navigation.map((item) => {
           const isActive = pathname === item.href || (item.href === '/dashboard' && pathname === '/dashboard');
           return (
@@ -82,13 +82,13 @@ export function Sidebar({ className }: SidebarProps) {
               <Button
                 variant={isActive ? 'secondary' : 'ghost'}
                 className={cn(
-                  'w-full justify-start gap-3',
+                  'w-full justify-start gap-3 min-h-[48px] touch-manipulation',
                   isCollapsed && 'justify-center px-2'
                 )}
               >
-                <item.icon className={cn('h-5 w-5', isActive && 'text-primary')} />
+                <item.icon className={cn('h-5 w-5 flex-shrink-0', isActive && 'text-primary')} />
                 {!isCollapsed && (
-                  <span className={isActive ? 'font-medium' : ''}>{item.name}</span>
+                  <span className={cn('truncate', isActive ? 'font-medium' : '')}>{item.name}</span>
                 )}
               </Button>
             </Link>
@@ -107,12 +107,12 @@ export function Sidebar({ className }: SidebarProps) {
               <Button
                 variant={isActive ? 'secondary' : 'ghost'}
                 className={cn(
-                  'w-full justify-start gap-3',
+                  'w-full justify-start gap-3 min-h-[48px] touch-manipulation',
                   isCollapsed && 'justify-center px-2'
                 )}
               >
-                <item.icon className={cn('h-5 w-5', isActive && 'text-primary')} />
-                {!isCollapsed && <span>{item.name}</span>}
+                <item.icon className={cn('h-5 w-5 flex-shrink-0', isActive && 'text-primary')} />
+                {!isCollapsed && <span className="truncate">{item.name}</span>}
               </Button>
             </Link>
           );

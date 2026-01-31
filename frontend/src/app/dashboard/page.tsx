@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Moon, Activity, Heart, Zap, TrendingUp, Brain } from 'lucide-react';
 import { HealthScoreCard } from '@/components/dashboard/HealthScoreCard';
 import { BiologicalAgeDisplay } from '@/components/dashboard/BiologicalAgeDisplay';
@@ -11,6 +12,7 @@ import { TrendChart } from '@/components/charts/TrendChart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/stores/userStore';
 import type { MetricStatus, TrendDirection } from '@/types/health';
 import type { ProtocolItem } from '@/types/protocols';
@@ -55,6 +57,7 @@ const demoTrendData = Array.from({ length: 30 }, (_, i) => {
 });
 
 export default function DashboardPage() {
+  const router = useRouter();
   const profile = useUserStore((state) => state.profile);
   const getChronologicalAge = useUserStore((state) => state.getChronologicalAge);
   const [isLoading, setIsLoading] = useState(true);
@@ -135,17 +138,17 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">
           Welcome back! Here&apos;s your health overview for today.
         </p>
       </div>
 
       {/* Top Row: Health Score & Biological Age */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <HealthScoreCard
           overallScore={demoScores.overallScore}
           biologicalAge={demoScores.biologicalAge}
@@ -207,7 +210,7 @@ export default function DashboardPage() {
       </MetricGrid>
 
       {/* Middle Row: Fasting Timer & Protocol */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <FastingTimer
           isActive={fastingState.isActive}
           elapsedHours={fastingState.elapsedHours}
@@ -236,50 +239,54 @@ export default function DashboardPage() {
 
       {/* Trends Section */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-primary" />
+        <CardHeader className="pb-2 sm:pb-4">
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             Health Trends
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-2 sm:px-6">
           <Tabs defaultValue="overall" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
-              <TabsTrigger value="overall">Overall</TabsTrigger>
-              <TabsTrigger value="sleep">Sleep</TabsTrigger>
-              <TabsTrigger value="activity">Activity</TabsTrigger>
-              <TabsTrigger value="recovery">Recovery</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-4 h-auto p-1">
+              <TabsTrigger value="overall" className="text-xs sm:text-sm py-2">Overall</TabsTrigger>
+              <TabsTrigger value="sleep" className="text-xs sm:text-sm py-2">Sleep</TabsTrigger>
+              <TabsTrigger value="activity" className="text-xs sm:text-sm py-2">Activity</TabsTrigger>
+              <TabsTrigger value="recovery" className="text-xs sm:text-sm py-2">Recovery</TabsTrigger>
             </TabsList>
-            <TabsContent value="overall" className="mt-4">
+            <TabsContent value="overall" className="mt-3 sm:mt-4">
               <TrendChart
                 data={demoTrendData}
                 type="area"
                 color="#3b82f6"
                 height={250}
+                mobileHeight={200}
               />
             </TabsContent>
-            <TabsContent value="sleep" className="mt-4">
+            <TabsContent value="sleep" className="mt-3 sm:mt-4">
               <TrendChart
                 data={demoTrendData.map(d => ({ ...d, value: 60 + Math.random() * 30 }))}
                 type="area"
                 color="#8b5cf6"
                 height={250}
+                mobileHeight={200}
               />
             </TabsContent>
-            <TabsContent value="activity" className="mt-4">
+            <TabsContent value="activity" className="mt-3 sm:mt-4">
               <TrendChart
                 data={demoTrendData.map(d => ({ ...d, value: 50 + Math.random() * 40 }))}
                 type="area"
                 color="#f59e0b"
                 height={250}
+                mobileHeight={200}
               />
             </TabsContent>
-            <TabsContent value="recovery" className="mt-4">
+            <TabsContent value="recovery" className="mt-3 sm:mt-4">
               <TrendChart
                 data={demoTrendData.map(d => ({ ...d, value: 65 + Math.random() * 25 }))}
                 type="area"
                 color="#22c55e"
                 height={250}
+                mobileHeight={200}
               />
             </TabsContent>
           </Tabs>
@@ -288,19 +295,24 @@ export default function DashboardPage() {
 
       {/* AI Insights Teaser */}
       <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
-        <CardContent className="flex items-center gap-4 p-6">
-          <div className="p-3 rounded-full bg-primary/10">
-            <Brain className="h-8 w-8 text-primary" />
+        <CardContent className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-6">
+          <div className="p-2 sm:p-3 rounded-full bg-primary/10 flex-shrink-0">
+            <Brain className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
           </div>
-          <div className="flex-1">
-            <h3 className="font-semibold text-lg">AI-Powered Insights</h3>
-            <p className="text-muted-foreground">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-base sm:text-lg">AI-Powered Insights</h3>
+            <p className="text-sm sm:text-base text-muted-foreground line-clamp-2 sm:line-clamp-none">
               Based on your recent data, focusing on improving your deep sleep could reduce your biological age by 0.5 years.
             </p>
           </div>
-          <button className="text-primary font-medium hover:underline">
-            View All Insights →
-          </button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-primary font-medium w-full sm:w-auto mt-2 sm:mt-0 touch-manipulation"
+            onClick={() => router.push('/dashboard/insights')}
+          >
+            View Insights
+          </Button>
         </CardContent>
       </Card>
     </div>

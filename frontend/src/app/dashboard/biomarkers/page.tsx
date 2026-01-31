@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { TestTube, TrendingUp, TrendingDown, Plus, Info, AlertTriangle, CheckCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -40,6 +41,7 @@ function getStatus(value: number, normalRange: [number, number], optimalRange: [
 }
 
 export default function BiomarkersPage() {
+  const router = useRouter();
 
   const allBiomarkers = [
     ...biomarkerResults.metabolic,
@@ -65,7 +67,7 @@ export default function BiomarkersPage() {
             Track your blood biomarkers for longevity optimization.
           </p>
         </div>
-        <Button>
+        <Button onClick={() => router.push('/dashboard/add')}>
           <Plus className="h-4 w-4 mr-2" />
           Add Results
         </Button>
@@ -147,7 +149,7 @@ export default function BiomarkersPage() {
 
         {Object.entries(biomarkerResults).map(([category, markers]) => (
           <TabsContent key={category} value={category} className="mt-6">
-            <BiomarkerSection title={category} markers={markers} expanded />
+            <BiomarkerSection title={category} markers={markers} />
           </TabsContent>
         ))}
       </Tabs>
@@ -206,7 +208,6 @@ interface BiomarkerSectionProps {
     lastTest: string;
     change: number;
   }>;
-  expanded?: boolean;
 }
 
 function BiomarkerSection({ title, markers }: BiomarkerSectionProps) {

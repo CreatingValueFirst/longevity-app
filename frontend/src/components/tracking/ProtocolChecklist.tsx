@@ -119,7 +119,7 @@ export function ProtocolChecklist({
               <div key={timeOfDay}>
                 <button
                   onClick={() => toggleSection(timeOfDay)}
-                  className="flex items-center justify-between w-full py-2 hover:bg-muted/50 rounded-lg px-2 transition-colors"
+                  className="flex items-center justify-between w-full py-3 sm:py-2 hover:bg-muted/50 active:bg-muted/70 rounded-lg px-2 transition-colors touch-manipulation min-h-[44px]"
                 >
                   <div className="flex items-center gap-2">
                     <ChevronDown
@@ -187,18 +187,18 @@ function ProtocolItemRow({ item, isCompleted, onClick, disabled }: ProtocolItemR
       onClick={onClick}
       disabled={disabled || isCompleted}
       className={cn(
-        'flex items-center gap-3 w-full p-3 rounded-lg transition-all text-left',
+        'flex items-center gap-3 w-full p-3 sm:p-3 rounded-lg transition-all text-left touch-manipulation min-h-[52px]',
         isCompleted
-          ? 'bg-green-500/10 hover:bg-green-500/15'
-          : 'hover:bg-muted/50',
+          ? 'bg-green-500/10 hover:bg-green-500/15 active:bg-green-500/20'
+          : 'hover:bg-muted/50 active:bg-muted/70',
         disabled && 'opacity-50 cursor-not-allowed'
       )}
       whileTap={{ scale: 0.98 }}
     >
-      {/* Checkbox */}
+      {/* Checkbox - larger for touch */}
       <div
         className={cn(
-          'h-6 w-6 rounded-full border-2 flex items-center justify-center transition-colors',
+          'h-7 w-7 sm:h-6 sm:w-6 rounded-full border-2 flex items-center justify-center transition-colors flex-shrink-0',
           isCompleted
             ? 'bg-green-500 border-green-500'
             : 'border-muted-foreground/30 hover:border-primary'
@@ -218,7 +218,7 @@ function ProtocolItemRow({ item, isCompleted, onClick, disabled }: ProtocolItemR
       </div>
 
       {/* Icon */}
-      <div className={cn('p-1.5 rounded-md', category.bg)}>
+      <div className={cn('p-1.5 rounded-md flex-shrink-0', category.bg)}>
         <Icon className={cn('h-4 w-4', category.color)} />
       </div>
 
@@ -226,7 +226,7 @@ function ProtocolItemRow({ item, isCompleted, onClick, disabled }: ProtocolItemR
       <div className="flex-1 min-w-0">
         <p
           className={cn(
-            'font-medium truncate',
+            'font-medium text-sm sm:text-base truncate',
             isCompleted && 'line-through text-muted-foreground'
           )}
         >
@@ -237,8 +237,8 @@ function ProtocolItemRow({ item, isCompleted, onClick, disabled }: ProtocolItemR
         )}
       </div>
 
-      {/* Category badge */}
-      <Badge variant="outline" className="text-xs capitalize hidden sm:flex">
+      {/* Category badge - hidden on mobile */}
+      <Badge variant="outline" className="text-xs capitalize hidden md:flex flex-shrink-0">
         {item.category}
       </Badge>
     </motion.button>

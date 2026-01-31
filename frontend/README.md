@@ -1,36 +1,150 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Longevity App
+
+A modern, evidence-based longevity tracking application with biological age estimation, protocol management, and health insights.
+
+## Features
+
+- **Dashboard**: Track your biological age and key health metrics
+- **Protocol Tracking**: Manage daily longevity protocols (supplements, exercise, sleep, nutrition)
+- **Fasting Timer**: Track intermittent fasting with metabolic state indicators
+- **Sleep Tracking**: Monitor sleep patterns and quality
+- **Activity Tracking**: Log exercise and physical activity
+- **Biomarkers**: Track and visualize health biomarkers
+- **Health News**: Stay updated with the latest longevity research
+- **AI Insights**: Get personalized recommendations based on your data
+
+## Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Radix UI + shadcn/ui
+- **State Management**: Zustand
+- **Data Fetching**: TanStack Query
+- **Animations**: Framer Motion
+- **Charts**: Recharts
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18.17 or later
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/longevity-app.git
+   cd longevity-app/frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env.local` file from the example:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+4. Update the environment variables in `.env.local`:
+   ```
+   NEXT_PUBLIC_API_URL=your-api-url
+   GNEWS_API_KEY=your-gnews-api-key
+   ```
+
+5. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Building for Production
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+  app/                    # Next.js App Router pages
+    dashboard/            # Dashboard pages
+      activity/           # Activity tracking
+      add/                # Quick add page
+      biomarkers/         # Biomarker tracking
+      fasting/            # Fasting timer
+      insights/           # AI insights
+      news/               # Health news feed
+      protocols/          # Protocol management
+      settings/           # User settings
+      sleep/              # Sleep tracking
+    layout.tsx            # Root layout
+    page.tsx              # Landing page
+    providers.tsx         # App providers
+  components/             # React components
+    layout/               # Layout components
+    tracking/             # Tracking components
+    ui/                   # UI primitives (shadcn)
+  hooks/                  # Custom React hooks
+  lib/                    # Utility functions
+  stores/                 # Zustand stores
+  types/                  # TypeScript types
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `NEXT_PUBLIC_API_URL` | Backend API URL | Yes |
+| `GNEWS_API_KEY` | GNews API key for health news | Yes |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | No |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key | No |
+| `NEXT_PUBLIC_ANALYTICS_ID` | Analytics tracking ID | No |
 
-To learn more about Next.js, take a look at the following resources:
+## PWA Support
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This app is a Progressive Web App (PWA) and can be installed on mobile devices. The manifest is located at `/public/manifest.json`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Required PWA Assets
 
-## Deploy on Vercel
+Icons should be placed in `/public/icons/`:
+- `icon-72x72.png`
+- `icon-96x96.png`
+- `icon-128x128.png`
+- `icon-144x144.png`
+- `icon-152x152.png`
+- `icon-192x192.png`
+- `icon-384x384.png`
+- `icon-512x512.png`
+- `apple-touch-icon.png`
+- `favicon-16x16.png`
+- `favicon-32x32.png`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Splash screens should be placed in `/public/splash/` for iOS devices.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm start` | Start production server |
+| `npm run lint` | Run ESLint |
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License.

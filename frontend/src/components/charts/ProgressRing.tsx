@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -26,22 +27,31 @@ export function ProgressRing({
   children,
   animate = true,
 }: ProgressRingProps) {
-  const radius = (size - strokeWidth) / 2;
+  // Ensure size is valid (greater than 0)
+  const safeSize = Math.max(size, 1);
+  const safeStrokeWidth = Math.max(strokeWidth, 1);
+
+  const radius = (safeSize - safeStrokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const percent = Math.min(100, Math.max(0, (value / max) * 100));
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
-  // Determine gradient ID based on color
-  const gradientId = `progress-gradient-${Math.random().toString(36).substr(2, 9)}`;
+  // Memoize gradient ID to prevent regeneration on every render
+  const gradientId = useMemo(
+    () => `progress-gradient-${Math.random().toString(36).substr(2, 9)}`,
+    []
+  );
   const useGradient = color.includes('green') || color.includes('amber') || color.includes('red');
 
   return (
     <div className={cn('relative inline-flex items-center justify-center', className)}>
       <svg
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
+        width={safeSize}
+        height={safeSize}
+        viewBox={`0 0 ${safeSize} ${safeSize}`}
         className="transform -rotate-90"
+        role="img"
+        aria-label={`Progress: ${percent.toFixed(0)}%`}
       >
         <defs>
           {/* Premium gradient definitions */}
@@ -82,22 +92,22 @@ export function ProgressRing({
 
         {/* Background circle with subtle styling */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={safeSize / 2}
+          cy={safeSize / 2}
           r={radius}
           fill="none"
-          strokeWidth={strokeWidth}
+          strokeWidth={safeStrokeWidth}
           className={bgColor}
           opacity={0.2}
         />
 
         {/* Progress circle with gradient */}
         <motion.circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={safeSize / 2}
+          cy={safeSize / 2}
           r={radius}
           fill="none"
-          strokeWidth={strokeWidth}
+          strokeWidth={safeStrokeWidth}
           strokeLinecap="round"
           stroke={useGradient ? `url(#${gradientId})` : undefined}
           className={useGradient ? undefined : color}
@@ -139,42 +149,48 @@ export function MultiProgressRing({
   gap = 4,
   className,
 }: MultiRingProps) {
+  // Ensure size is valid (greater than 0)
+  const safeSize = Math.max(size, 1);
+  const safeStrokeWidth = Math.max(strokeWidth, 1);
+  const safeGap = Math.max(gap, 0);
 
   return (
     <div className={cn('relative inline-flex items-center justify-center', className)}>
       <svg
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
+        width={safeSize}
+        height={safeSize}
+        viewBox={`0 0 ${safeSize} ${safeSize}`}
         className="transform -rotate-90"
+        role="img"
+        aria-label="Multi-ring progress indicator"
       >
         {rings.map((ring, index) => {
-          const ringOffset = index * (strokeWidth + gap);
-          const radius = (size - strokeWidth) / 2 - ringOffset;
+          const ringOffset = index * (safeStrokeWidth + safeGap);
+          const radius = (safeSize - safeStrokeWidth) / 2 - ringOffset;
           const circumference = radius * 2 * Math.PI;
           const percent = Math.min(100, Math.max(0, (ring.value / (ring.max ?? 100)) * 100));
           const strokeDashoffset = circumference - (percent / 100) * circumference;
 
           return (
-            <g key={index}>
+            <g key={ring.label || index}>
               {/* Background */}
               <circle
-                cx={size / 2}
-                cy={size / 2}
+                cx={safeSize / 2}
+                cy={safeSize / 2}
                 r={radius}
                 fill="none"
-                strokeWidth={strokeWidth}
+                strokeWidth={safeStrokeWidth}
                 className="stroke-muted"
                 opacity={0.3}
               />
 
               {/* Progress */}
               <motion.circle
-                cx={size / 2}
-                cy={size / 2}
+                cx={safeSize / 2}
+                cy={safeSize / 2}
                 r={radius}
                 fill="none"
-                strokeWidth={strokeWidth}
+                strokeWidth={safeStrokeWidth}
                 strokeLinecap="round"
                 className={ring.color}
                 initial={{ strokeDashoffset: circumference }}

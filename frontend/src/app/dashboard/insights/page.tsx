@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Brain,
   TrendingUp,
@@ -17,6 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 import type { RecommendationItem } from '@/types/protocols';
 
 // Demo AI recommendations
@@ -279,7 +281,19 @@ export default function InsightsPage() {
 }
 
 function RecommendationCard({ recommendation }: { recommendation: RecommendationItem }) {
+  const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+
+  const handleAddToProtocol = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card collapse
+    setIsAdding(true);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setIsAdding(false);
+    toast.success(`"${recommendation.title}" added to your protocol!`);
+    router.push('/dashboard/protocols');
+  };
 
   return (
     <div
@@ -329,8 +343,13 @@ function RecommendationCard({ recommendation }: { recommendation: Recommendation
                 </div>
               )}
 
-              <Button size="sm" className="w-full">
-                Add to Protocol
+              <Button
+                size="sm"
+                className="w-full"
+                onClick={handleAddToProtocol}
+                disabled={isAdding}
+              >
+                {isAdding ? 'Adding...' : 'Add to Protocol'}
               </Button>
             </div>
           )}

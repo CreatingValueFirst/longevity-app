@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Newspaper,
@@ -67,11 +68,13 @@ function NewsCard({ article, index }: { article: NewsArticle; index: number }) {
         <CardContent className="p-3 sm:p-4">
           <div className="flex gap-3 sm:gap-4">
             {article.image ? (
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-muted">
-                <img
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-muted relative">
+                <Image
                   src={article.image}
                   alt={article.title}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  unoptimized
                 />
               </div>
             ) : (
@@ -174,11 +177,13 @@ function FeaturedNewsCard({ article }: { article: NewsArticle }) {
       <Card className="overflow-hidden glass-card border-0">
         <div className="relative">
           {article.image ? (
-            <div className="h-40 sm:h-48 overflow-hidden">
-              <img
+            <div className="h-40 sm:h-48 overflow-hidden relative">
+              <Image
                 src={article.image}
                 alt={article.title}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                unoptimized
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
             </div>
