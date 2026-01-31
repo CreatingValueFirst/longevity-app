@@ -170,7 +170,6 @@ export default function DashboardPage() {
           value={demoMetrics.sleep.value}
           unit={demoMetrics.sleep.unit}
           change={demoMetrics.sleep.change}
-          changeLabel="vs avg"
           status={demoMetrics.sleep.status}
           icon={Moon}
           sparklineData={demoMetrics.sleep.sparkline}
@@ -181,7 +180,6 @@ export default function DashboardPage() {
           value={demoMetrics.hrv.value}
           unit={demoMetrics.hrv.unit}
           change={demoMetrics.hrv.change}
-          changeLabel="vs avg"
           status={demoMetrics.hrv.status}
           icon={Heart}
           sparklineData={demoMetrics.hrv.sparkline}
@@ -191,7 +189,6 @@ export default function DashboardPage() {
           value={demoMetrics.steps.value}
           unit={demoMetrics.steps.unit}
           change={demoMetrics.steps.change}
-          changeLabel="vs avg"
           status={demoMetrics.steps.status}
           icon={Activity}
           sparklineData={demoMetrics.steps.sparkline}
@@ -202,7 +199,6 @@ export default function DashboardPage() {
           value={demoMetrics.rhr.value}
           unit={demoMetrics.rhr.unit}
           change={demoMetrics.rhr.change}
-          changeLabel="vs avg"
           status={demoMetrics.rhr.status}
           icon={Zap}
           sparklineData={demoMetrics.rhr.sparkline}

@@ -161,7 +161,6 @@ export default function SleepPage() {
           value={sleepData.lastNight.duration}
           unit="hours"
           change={((sleepData.lastNight.duration - sleepData.averages.duration) / sleepData.averages.duration) * 100}
-          changeLabel="vs avg"
           status={sleepData.lastNight.duration >= 7 && sleepData.lastNight.duration <= 9 ? 'optimal' : 'moderate'}
           icon={Clock}
           optimalRange={[7, 9]}
@@ -171,7 +170,6 @@ export default function SleepPage() {
           value={sleepData.lastNight.deepSleep}
           unit="hours"
           change={((sleepData.lastNight.deepSleep - sleepData.averages.deepSleep) / sleepData.averages.deepSleep) * 100}
-          changeLabel="vs avg"
           status={sleepData.lastNight.deepSleep >= 1.5 ? 'optimal' : 'moderate'}
           icon={Moon}
           optimalRange={[1.5, 2]}

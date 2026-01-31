@@ -16,6 +16,7 @@ import {
   Brain,
   PlusCircle,
   Heart,
+  Newspaper,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -29,6 +30,7 @@ const navigation = [
   { name: 'Biomarkers', href: '/dashboard/biomarkers', icon: TestTube },
   { name: 'Protocols', href: '/dashboard/protocols', icon: ClipboardList },
   { name: 'Insights', href: '/dashboard/insights', icon: Brain },
+  { name: 'News', href: '/dashboard/news', icon: Newspaper },
 ];
 
 const secondaryNav = [
@@ -47,22 +49,22 @@ export function Sidebar({ className }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'relative flex flex-col h-full bg-card border-r transition-all duration-300',
+        'relative flex flex-col h-full bg-card/80 backdrop-blur-xl border-r border-border/50 transition-all duration-300',
         isCollapsed ? 'w-16' : 'w-64',
         className
       )}
     >
       {/* Logo */}
       <div className="flex items-center gap-3 p-4 h-16">
-        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary">
-          <Heart className="h-6 w-6 text-primary-foreground" />
+        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-chart-4 shadow-premium-sm">
+          <Heart className="h-6 w-6 text-white" />
         </div>
         {!isCollapsed && (
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="font-bold text-lg"
+            className="font-bold text-lg gradient-text"
           >
             Longevity
           </motion.span>

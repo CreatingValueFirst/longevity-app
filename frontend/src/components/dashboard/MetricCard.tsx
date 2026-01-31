@@ -13,7 +13,6 @@ interface MetricCardProps {
   value: number | string;
   unit?: string;
   change?: number;
-  changeLabel?: string;
   status?: MetricStatus;
   icon?: LucideIcon;
   sparklineData?: (number | null)[];
@@ -27,7 +26,6 @@ export function MetricCard({
   value,
   unit,
   change,
-  changeLabel,
   status = 'moderate',
   icon: Icon,
   sparklineData,
@@ -48,26 +46,31 @@ export function MetricCard({
   return (
     <Card
       className={cn(
-        'overflow-hidden transition-all hover:shadow-md',
-        onClick && 'cursor-pointer hover:scale-[1.02]',
+        'overflow-hidden transition-all duration-300 card-hover group relative',
+        onClick && 'cursor-pointer',
         className
       )}
       onClick={onClick}
     >
-      <CardContent className="p-4">
-        <div className="flex justify-between items-start mb-3">
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-chart-2/3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+
+      <CardContent className="p-3 sm:p-4 relative">
+        <div className="flex justify-between items-start mb-2 sm:mb-3">
           <div className="flex items-center gap-2">
             {Icon && (
-              <div className={cn('p-2 rounded-lg', statusColors.bg)}>
-                <Icon className={cn('h-4 w-4', statusColors.text)} />
+              <div className={cn('p-1.5 sm:p-2 rounded-lg transition-transform group-hover:scale-110', statusColors.bg)}>
+                <Icon className={cn('h-3.5 w-3.5 sm:h-4 sm:w-4', statusColors.text)} />
               </div>
             )}
-            <span className="text-sm font-medium text-muted-foreground">{title}</span>
+            <span className="text-xs sm:text-sm font-medium text-muted-foreground">{title}</span>
           </div>
           {change !== undefined && (
             <div className={cn(
-              'flex items-center gap-1 text-xs font-medium',
-              isPositiveChange ? 'text-green-500' : isNegativeChange ? 'text-red-500' : 'text-muted-foreground'
+              'flex items-center gap-1 text-xs font-medium px-1.5 py-0.5 rounded-full',
+              isPositiveChange ? 'text-green-500 bg-green-500/10' :
+              isNegativeChange ? 'text-red-500 bg-red-500/10' :
+              'text-muted-foreground bg-muted'
             )}>
               {isPositiveChange ? (
                 <TrendingUp className="h-3 w-3" />
@@ -77,7 +80,6 @@ export function MetricCard({
                 <Minus className="h-3 w-3" />
               )}
               {Math.abs(change).toFixed(1)}%
-              {changeLabel && <span className="text-muted-foreground ml-1">{changeLabel}</span>}
             </div>
           )}
         </div>
@@ -85,7 +87,7 @@ export function MetricCard({
         <div className="flex items-end justify-between">
           <div className="flex items-baseline gap-1">
             <motion.span
-              className="text-3xl font-bold"
+              className="text-2xl sm:text-3xl font-bold"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               key={value}
@@ -93,25 +95,27 @@ export function MetricCard({
               {typeof value === 'number' ? value.toLocaleString() : value}
             </motion.span>
             {unit && (
-              <span className="text-sm text-muted-foreground">{unit}</span>
+              <span className="text-xs sm:text-sm text-muted-foreground">{unit}</span>
             )}
           </div>
 
           {sparklineData && sparklineData.length > 2 && (
-            <Sparkline
-              data={sparklineData}
-              color={sparklineColor}
-              width={60}
-              height={24}
-            />
+            <div className="hidden sm:block">
+              <Sparkline
+                data={sparklineData}
+                color={sparklineColor}
+                width={60}
+                height={24}
+              />
+            </div>
           )}
         </div>
 
         {optimalRange && (
-          <div className="mt-2 pt-2 border-t">
+          <div className="mt-2 pt-2 border-t border-border/50">
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>Optimal: {optimalRange[0]}-{optimalRange[1]}</span>
-              <span className={cn('font-medium', statusColors.text)}>
+              <span className={cn('font-semibold px-1.5 py-0.5 rounded', statusColors.text, statusColors.bg)}>
                 {status.charAt(0).toUpperCase() + status.slice(1)}
               </span>
             </div>

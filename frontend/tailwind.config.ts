@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ['Inter', 'system-ui', 'sans-serif'],
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -55,7 +58,30 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+  		boxShadow: {
+  			'premium-sm': 'var(--shadow-elevation-low)',
+  			'premium': 'var(--shadow-elevation-medium)',
+  			'premium-lg': 'var(--shadow-elevation-high)',
+  			'glow': '0 0 20px hsl(var(--primary) / 0.3)',
+  			'glow-lg': '0 0 40px hsl(var(--primary) / 0.4)',
+  		},
+  		animation: {
+  			'shimmer': 'shimmer 2s linear infinite',
+  			'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+  			'gradient-shift': 'gradient-shift 15s ease infinite',
+  			'float': 'float 3s ease-in-out infinite',
+  		},
+  		keyframes: {
+  			'float': {
+  				'0%, 100%': { transform: 'translateY(0)' },
+  				'50%': { transform: 'translateY(-5px)' },
+  			},
+  		},
+  		backgroundImage: {
+  			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+  			'gradient-premium': 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--chart-4)) 50%, hsl(var(--chart-2)) 100%)',
+  		},
   	}
   },
   plugins: [require("tailwindcss-animate")],

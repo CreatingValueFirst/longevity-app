@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Home, Activity, Plus, Brain, User } from 'lucide-react';
+import { Home, Activity, Plus, Brain, Newspaper } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -11,15 +11,15 @@ const navItems = [
   { name: 'Track', href: '/dashboard/protocols', icon: Activity },
   { name: 'Add', href: '/dashboard/add', icon: Plus, isAction: true },
   { name: 'Insights', href: '/dashboard/insights', icon: Brain },
-  { name: 'Profile', href: '/dashboard/settings', icon: User },
+  { name: 'News', href: '/dashboard/news', icon: Newspaper },
 ];
 
 export function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-t border-border/50 lg:hidden safe-area-bottom">
-      <div className="flex items-center justify-around h-[70px] px-1 max-w-lg mx-auto">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-t border-border/30 lg:hidden safe-area-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+      <div className="flex items-center justify-around h-[76px] px-2 max-w-lg mx-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href ||
             (item.href !== '/dashboard' && pathname.startsWith(item.href));
@@ -35,7 +35,7 @@ export function MobileNav() {
                   whileTap={{ scale: 0.9 }}
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                  className="flex items-center justify-center w-14 h-14 -mt-5 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 active:shadow-md"
+                  className="flex items-center justify-center w-14 h-14 -mt-6 rounded-full bg-gradient-to-br from-primary via-primary to-chart-4 text-white shadow-lg shadow-primary/40 active:shadow-md pulse-glow"
                 >
                   <item.icon className="h-7 w-7" strokeWidth={2.5} />
                 </motion.div>

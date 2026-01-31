@@ -44,7 +44,7 @@ export function Header({ className }: HeaderProps) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 flex items-center justify-between h-16 px-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
+        'sticky top-0 z-50 flex items-center justify-between h-16 px-3 sm:px-4 border-b border-border/50 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60',
         className
       )}
     >
@@ -63,12 +63,12 @@ export function Header({ className }: HeaderProps) {
       </div>
 
       {/* Search */}
-      <div className="flex-1 max-w-md mx-4 hidden sm:block">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <div className="flex-1 max-w-md mx-2 sm:mx-4 hidden sm:block">
+        <div className="relative group">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <Input
             placeholder="Search metrics, protocols..."
-            className="pl-10 bg-muted/50"
+            className="pl-10 bg-muted/30 border-muted/50 focus:bg-background focus:border-primary/50 transition-all"
           />
         </div>
       </div>
@@ -76,12 +76,19 @@ export function Header({ className }: HeaderProps) {
       {/* Actions */}
       <div className="flex items-center gap-2">
         {/* Theme Toggle */}
-        <Button variant="ghost" size="icon" onClick={toggleTheme}>
-          {theme === 'dark' ? (
-            <Sun className="h-5 w-5" />
-          ) : (
-            <Moon className="h-5 w-5" />
-          )}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          className="relative overflow-hidden group"
+        >
+          <div className="transition-transform duration-300 group-hover:rotate-12">
+            {theme === 'dark' ? (
+              <Sun className="h-5 w-5 text-amber-500" />
+            ) : (
+              <Moon className="h-5 w-5 text-indigo-500" />
+            )}
+          </div>
         </Button>
 
         {/* Notifications */}
@@ -107,7 +114,7 @@ export function Header({ className }: HeaderProps) {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuContent align="end" className="w-56 max-w-[calc(100vw-2rem)]">
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium">{profile?.fullName || 'User'}</p>
